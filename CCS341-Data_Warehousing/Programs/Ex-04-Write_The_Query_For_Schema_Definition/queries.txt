@@ -1,0 +1,77 @@
+CREATE TABLE students (
+student_id INT PRIMARY KEY,
+first_name VARCHAR(50),
+last_name VARCHAR(50),
+email VARCHAR(100),
+ambition VARCHAR(50)
+);
+
+CREATE TABLE courses (
+course_id INT PRIMARY KEY,
+course_name VARCHAR(100),
+department VARCHAR(50)
+);
+
+CREATE TABLE teachers (
+teacher_id INT PRIMARY KEY,
+first_name VARCHAR(50),
+last_name VARCHAR(50),
+email VARCHAR(100),
+department VARCHAR(50)
+);
+
+CREATE TABLE grades (
+grade_id INT PRIMARY KEY,
+student_id INT,
+course_id INT,
+teacher_id INT,
+grade CHAR(2),
+FOREIGN KEY (student_id) REFERENCES students(student_id),
+FOREIGN KEY (course_id) REFERENCES courses(course_id),
+FOREIGN KEY (teacher_id) REFERENCES teachers(teacher_id)
+);
+
+INSERT INTO students (student_id, first_name, last_name, email, ambition)
+VALUES
+(1, 'Ivan', 'Ivanov', 'ivanov@moscow.school', 'Cosmonaut'),
+(2, 'Anastasia', 'Petrova', 'petrova@moscow.school', 'Doctor');
+
+INSERT INTO courses (course_id, course_name, department)
+VALUES
+(101, 'Space Engineering', 'Aerospace Engineering'),
+(102, 'Medical Science', 'Medical Department');
+
+INSERT INTO teachers (teacher_id, first_name, last_name, email, department)
+VALUES
+(201, 'Dmitry', 'Rogozin', 'rogozin@moscow.school', 'Aerospace Engineering'),
+(202, 'Lyudmila', 'Pavlichenko', 'pavlichenko@moscow.school', 'Medical Department');
+
+INSERT INTO grades (grade_id, student_id, course_id, teacher_id, grade)
+VALUES
+(301, 1, 101, 201, 'A'),
+(302, 2, 102, 202, 'B');
+
+SELECT
+s.student_id,
+s.first_name,
+s.last_name,
+g.grade,
+c.course_name
+FROM
+students s
+JOIN
+grades g ON g.student_id = s.student_id
+JOIN
+courses c ON g.course_id = c.course_id;
+
+SELECT
+c.course_name,
+t.first_name,
+t.last_name,
+g.grade
+FROM
+courses c
+JOIN
+grades g ON c.course_id = g.course_id
+JOIN
+teachers t ON g.teacher_id = t.teacher_id;

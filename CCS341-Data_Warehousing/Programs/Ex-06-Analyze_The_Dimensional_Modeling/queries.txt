@@ -1,0 +1,77 @@
+CREATE TABLE DateDimension (
+DateKey INT AUTO_INCREMENT,
+Date DATE,
+Weekday VARCHAR(9),
+MonthName VARCHAR(9),
+Year INT,
+PRIMARY KEY (DateKey)
+);
+
+CREATE TABLE ProductDimension (
+ProductKey INT AUTO_INCREMENT,
+ProductName VARCHAR(255),
+ProductCategory VARCHAR(255),
+Price DECIMAL(10,2),
+PRIMARY KEY (ProductKey)
+);
+
+CREATE TABLE CustomerDimension (
+CustomerKey INT AUTO_INCREMENT,
+CustomerName VARCHAR(255),
+ContactInfo VARCHAR(255),
+Age INT,
+Gender CHAR(1),
+PRIMARY KEY (CustomerKey)
+);
+
+CREATE TABLE StoreDimension (
+StoreKey INT AUTO_INCREMENT,
+StoreName VARCHAR(255),
+Location VARCHAR(255),
+ManagerName VARCHAR(255),
+PRIMARY KEY (StoreKey)
+);
+
+CREATE TABLE SalesFact (
+SaleID INT AUTO_INCREMENT,
+DateKey INT,
+ProductKey INT,
+CustomerKey INT,
+StoreKey INT,
+QuantitySold INT,
+SaleAmount DECIMAL(10,2),PRIMARY KEY (SaleID),
+FOREIGN KEY (DateKey) REFERENCES DateDimension(DateKey),
+FOREIGN KEY (ProductKey) REFERENCES ProductDimension(ProductKey),
+FOREIGN KEY (CustomerKey) REFERENCES CustomerDimension(CustomerKey),
+FOREIGN KEY (StoreKey) REFERENCES StoreDimension(StoreKey)
+);
+
+INSERT INTO DateDimension (Date, Weekday, MonthName, Year) VALUES
+('2022-01-10', 'Monday', 'January', 2022),
+('2022-01-11', 'Tuesday', 'January', 2022),
+('2022-01-12', 'Wednesday', 'January', 2022);
+
+INSERT INTO ProductDimension (ProductName, ProductCategory, Price) VALUES
+('Potato kettle', 'Kitchenware', 2499.99),
+('Medvedeva light', 'Electronics', 4599.50),
+('Pavlovsk tablet', 'Electronics', 15999.90);
+
+INSERT INTO CustomerDimension (CustomerName, ContactInfo, Age, Gender) VALUES
+('Alexey Navalny', 'navalny@gmail.com', 45, 'M'),
+('Nadezhda Savchenko', 'nadiya@moscow.ru', 40, 'F'),
+('Ivan Urgant', 'ivanurgant@moscow.ru', 45, 'M');
+
+INSERT INTO StoreDimension (StoreName, Location, ManagerName) VALUES
+('Moscow Store', 'Moscow', 'Dmitry Anatolyevich'),
+('Siberian Center', 'Novosibirsk', 'Anna Sergeyevna'),
+('Donskoy Kiosk', 'Rostov-on-Don', 'Yakov Alexandrovich');
+
+INSERT INTO SalesFact (DateKey, ProductKey, CustomerKey, StoreKey, QuantitySold, SaleAmount) VALUES
+(1, 1, 1, 1, 2, 4999.98),
+(2, 2, 2, 2, 1, 4599.50),
+(3, 3, 3, 3, 1, 15999.90);
+
+SELECT StoreDimension.StoreName, SUM(SalesFact.SaleAmount) AS TotalSales
+FROM SalesFact
+JOIN StoreDimension ON SalesFact.StoreKey = StoreDimension.StoreKey
+GROUP BY StoreDimension.StoreName;

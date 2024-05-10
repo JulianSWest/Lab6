@@ -1,0 +1,67 @@
+CREATE TABLE ProductDimension (
+ProductKey INT AUTO_INCREMENT,
+ProductName VARCHAR(255),
+ProductCategory VARCHAR(255),
+Price DECIMAL(10,2),
+PRIMARY KEY (ProductKey)
+);
+CREATE TABLE CustomerDimension (
+CustomerKey INT AUTO_INCREMENT,
+CustomerName VARCHAR(255),
+ContactInfo VARCHAR(255),
+Age INT,
+Gender CHAR(1),
+PRIMARY KEY (CustomerKey)
+);
+CREATE TABLE LocationDimension (
+LocationKey INT AUTO_INCREMENT,
+LocationName VARCHAR(255),
+City VARCHAR(255),
+Region VARCHAR(255),
+PRIMARY KEY (LocationKey)
+);
+CREATE TABLE TimeDimension (
+    TimeKey INT AUTO_INCREMENT,
+    Date DATE,
+    Weekday VARCHAR(20),
+    MonthName VARCHAR(20),
+    Year INT,
+    PRIMARY KEY (TimeKey)
+);
+CREATE TABLE InventoryFact (
+    FactKey INT AUTO_INCREMENT,
+    TimeKey INT,
+    ProductKey INT,
+    CustomerKey INT,
+    LocationKey INT,
+    QuantitySold INT,
+    SaleAmount DECIMAL(10,2),
+    PRIMARY KEY (FactKey),
+    FOREIGN KEY (TimeKey) REFERENCES TimeDimension(TimeKey),
+    FOREIGN KEY (ProductKey) REFERENCES ProductDimension(ProductKey),
+    FOREIGN KEY (CustomerKey) REFERENCES CustomerDimension(CustomerKey),
+    FOREIGN KEY (LocationKey) REFERENCES LocationDimension(LocationKey)
+);
+INSERT INTO TimeDimension (Date, Weekday, MonthName, Year) VALUES
+('2024-01-10', 'Monday', 'January', 2024),
+('2024-01-11', 'Tuesday', 'January', 2024),
+('2024-01-12', 'Wednesday', 'January', 2024);
+INSERT INTO ProductDimension (ProductName, ProductCategory, Price)
+VALUES
+('Laptop', 'Electronics', 1299.99),
+('Smartphone', 'Electronics', 899.50),
+('Chair', 'Furniture', 299.90);
+INSERT INTO CustomerDimension (CustomerName, ContactInfo, Age, Gender)
+VALUES
+('John Doe', 'john.doe@example.com', 35, 'M'),
+('Jane Smith', 'jane.smith@example.com', 28, 'F'),
+('David Johnson', 'david.johnson@example.com', 42, 'M');
+INSERT INTO LocationDimension (LocationName, City, Region) VALUES
+('Headquarters', 'New York', 'East Coast'),
+('Branch Office', 'Los Angeles', 'West Coast'),
+('Retail Store', 'Chicago', 'Midwest');
+INSERT INTO InventoryFact (TimeKey, ProductKey, CustomerKey,
+LocationKey, QuantitySold, SaleAmount) VALUES
+(1, 1, 1, 1, 2, 2599.98),
+(2, 2, 2, 2, 1, 899.50),
+(3, 3, 3, 3, 3, 899.70);
