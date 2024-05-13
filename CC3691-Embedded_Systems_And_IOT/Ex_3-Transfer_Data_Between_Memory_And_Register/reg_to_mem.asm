@@ -1,0 +1,3 @@
+MOV A,#12h
+MOV 30h,A
+END

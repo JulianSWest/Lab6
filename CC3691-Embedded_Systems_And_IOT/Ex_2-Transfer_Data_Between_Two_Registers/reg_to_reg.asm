@@ -1,0 +1,5 @@
+ORG  00h
+MOV  R0, #12h
+MOV A, R0
+MOV  R1, A
+END
